@@ -1,0 +1,4 @@
+city:
+  id: 1
+  cityName: 克拉玛依
+  desc: ${city.cityName} is beautiful city!
