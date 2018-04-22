@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.PersonDao">
+    
+    <resultMap id="BaseResultMap" type="org.spring.springboot.domain.Person">
+        <result column="id" property="id" />
+        <result column="person_name" property="name" />
+        <result column="person_gender" property="gender" />
+        <result column="description" property="description" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, person_name, person_gender, description
+    </sql>
+
+    <parameterMap id="Person" type="org.spring.springboot.domain.Person"/>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM person
+    </select>
+    
+    <select id="findOne" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM person
+        WHERE
+        id = #{id}
+    </select>
+
+    <insert id="savePerson" parameterMap="Person" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO person
+        (
+          <include refid="Base_Column_List" />
+        )
+        VALUES (#{id}, #{name}, #{gender}, #{description})
+    </insert>
+
+    <update id="updatePerson" parameterMap="Person">
+        UPDATE person SET
+        <if test="name != null">
+            person_name = #{name},
+        </if>
+        <if test="gender != null">
+            person_gender = #{gender},
+        </if>
+        <if test="description != null">
+            description = #{description}
+        </if>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="deletePerson" parameterType="java.lang.Long">
+        DELETE FROM
+        person
+        WHERE
+        id = #{id}
+    </delete>
+
+</mapper>
